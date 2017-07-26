@@ -166,17 +166,21 @@ public class MainGameLoop {
     uis.add(uiTexture);
     */
     List<UIComponent> uis = new ArrayList<>();
-    UIComponent ui = new UIComponent("cobble",0.5f,0.5f,0.25f,0.25f);
-    UIComponent ui2 = new UIComponent("cobble",ui,0.5f,0.5f,0.5f,0.5f);
-    UIComponent ui3 = new UIComponent("cobble",ui2,0.5f,0.5f,0.5f,1f);
+    UIComponent ui1 = new UIComponent("cobble",0f,0.25f,0f,0.25f);
+    UIComponent ui2 = new UIComponent("cobble",0.25f,0.75f,0.25f,0.75f);
+    UIComponent ui3 = new UIComponent("cobble",ui2,0.5f,1f,0.5f,1.5f);
 
-    uis.add(ui);
+    ui1.add(ui2,0.5f,1f,0.5f,1f);
+
+    uis.add(ui1);
+    //uis.add(ui2);
+
     UIRenderer uiRenderer = new UIRenderer(loader);
 
     while(!Display.isCloseRequested()) {
       long startTime = System.nanoTime();
       camera.move();
-      System.out.println(picker.getCurrentRay());
+      //System.out.println(picker.getCurrentRay());
       picker.update();
       for (int i = 0; i < 40; i++) {
         for (int j = 0; j < 25; j++) {
@@ -193,7 +197,7 @@ public class MainGameLoop {
       for(UIComponent uiComponent: uis) {
         uiComponent.getTextures(uiTextures);
       }
-      System.out.println(uiTextures.size() + "\n\n\n\n\n");
+      //System.out.println(uiTextures.size() + "\n\n\n\n\n");
       uiRenderer.render(uiTextures);
 
       long endTime = System.nanoTime();
@@ -202,7 +206,7 @@ public class MainGameLoop {
       ++fps;
       if(totalTime > 1000000000) {
         totalTime = 0;
-        System.out.println(fps);
+        //System.out.println(fps);
         fps = 0;
       }
       TextMaster.render();

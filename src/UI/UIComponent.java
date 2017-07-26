@@ -13,15 +13,15 @@ public class UIComponent {
   private UIComponent parentComponent;
   private String textureName;
 
-  private float relativeX;
-  private float relativeY;
-  private float relativeW;
-  private float relativeH;
+  private float relativeXL;   // x left
+  private float relativeXR;   // x right
+  private float relativeYL;   // y left
+  private float relativeYR;   // y right
 
-  private float absoluteX;
-  private float absoluteY;
-  private float absoluteW;
-  private float absoluteH;
+  private float absoluteXL;   // x left
+  private float absoluteXR;   // x right
+  private float absoluteYL;   // y left
+  private float absoluteYR;   // y right
 
   private boolean visible;
 
@@ -30,47 +30,44 @@ public class UIComponent {
 
   private List<UIComponent> childs = new ArrayList<>();
 
-  private float getAbsoluteX() {
-    return absoluteX;
+  private float getAbsoluteXL() {
+    return absoluteXL;
   }
 
-  private float getAbsoluteY() {
-    return absoluteY;
+  private float getAbsoluteXR() {
+    return absoluteXR;
   }
 
-  private float getAbsoluteW() {
-    return absoluteW;
-  }
+  private float getAbsoluteYL() { return absoluteYL; }
 
-  private float getAbsoluteH() {
-    return absoluteH;
+  private float getAbsoluteYR() {
+    return absoluteYR;
   }
 
   private void setBackground() {
     if(background == null) {
       background = new UITexture(
           Loader.getLoader().loadTexture(textureName),
-          new Vector2f(2 * absoluteX - 1 + absoluteW,
-              2 * (1 - absoluteY) - 1 - absoluteH),
-          new Vector2f(absoluteW, absoluteH));
+          new Vector2f(absoluteXL + absoluteXR - 1,
+              1 - absoluteYL - absoluteYR),
+          new Vector2f(absoluteXR - absoluteXL, absoluteYR - absoluteYL));
     } else {
-      background.setCoords(new Vector2f(2 * absoluteX - 1 + absoluteW,
-              2 * (1 - absoluteY) - 1 - absoluteH),
-          new Vector2f(absoluteW, absoluteH));
+      background.setCoords(new Vector2f(absoluteXL + absoluteXR - 1,
+              1 - absoluteYL - absoluteYR),
+          new Vector2f(absoluteXR - absoluteXL, absoluteYR - absoluteYL));
     }
   }
 
-  public UIComponent(String textureName, UIComponent parent, float relativeX, float relativeY,
-      float relativeW, float relativeH) {
-    parent.add(this,relativeX,relativeY,relativeW,relativeH);
+  public UIComponent(String textureName, UIComponent parent, float relativeXL, float relativeXR,
+      float relativeYL, float relativeYR) {
     this.textureName = textureName;
+    parent.add(this,relativeXL,relativeXR,relativeYL,relativeYR);
     setBackground();
-
   }
 
-  public UIComponent(String textureName, float relativeX, float relativeY, float relativeW,
-      float relativeH) {
-    setPosition(relativeX,relativeY,relativeW,relativeH);
+  public UIComponent(String textureName, float relativeXL, float relativeXR, float relativeYL,
+      float relativeYR) {
+    setPosition(relativeXL,relativeXR,relativeYL,relativeYR);
     this.parentComponent = null;
     computeAbsolutePosition();
     this.visible = true;
@@ -83,12 +80,12 @@ public class UIComponent {
     this.visible = false;
   }
 
-  public void setPosition(float relativeX, float relativeY, float relativeW,
-      float relativeH) {
-    this.relativeX = relativeX;
-    this.relativeY = relativeY;
-    this.relativeW = relativeW;
-    this.relativeH = relativeH;
+  private void setPosition(float relativeXL, float relativeXR, float relativeYL,
+      float relativeYR) {
+    this.relativeXL = relativeXL;
+    this.relativeXR = relativeXR;
+    this.relativeYL = relativeYL;
+    this.relativeYR = relativeYR;
     computeAbsolutePosition();
   }
 
@@ -100,15 +97,25 @@ public class UIComponent {
     parentComponent = parent;
   }
 
-  public void add(UIComponent child, float relativeX, float relativeY,
-      float relativeW, float relativeH){
+  public void add(UIComponent child, float relativeXL, float relativeXR,
+      float relativeYL, float relativeYR){
       child.setParent(this);
-      child.setPosition(relativeX, relativeY, relativeW, relativeH);
+      child.setPosition(relativeXL, relativeXR, relativeYL, relativeYR);
+      child.setBackground();
       childs.add(child);
-      child.computeAbsolutePosition();
       child.setVisible(true);
+      child.recomputeAbsolutePosition();
+  }
 
-      //TODO: !!!!IMPORTANT!!!! need a recursive funtion to recompute the absolute coords of all childs
+  private void recomputeAbsolutePosition() {
+    this.computeAbsolutePosition();
+    this.setBackground();
+
+    if(this.childs != null) {
+      for (UIComponent child : this.childs) {
+        child.recomputeAbsolutePosition();
+      }
+    }
   }
 
   public void remove() {
@@ -126,23 +133,23 @@ public class UIComponent {
   }
 
   private void computeAbsolutePosition() {
-    float parentX, parentY, parentW, parentH;
+    float parentXL, parentXR, parentYL, parentYR;
     if(parentComponent == null) {
-      parentX = 0;
-      parentY = 0;
-      parentW = 1;
-      parentH = 1;
+      parentXL = 0;
+      parentXR = 1;
+      parentYL = 0;
+      parentYR = 1;
     } else {
-      parentX = parentComponent.getAbsoluteX();
-      parentY = parentComponent.getAbsoluteY();
-      parentW = parentComponent.getAbsoluteW();
-      parentH = parentComponent.getAbsoluteH();
+      parentXL = parentComponent.getAbsoluteXL();
+      parentXR = parentComponent.getAbsoluteXR();
+      parentYL = parentComponent.getAbsoluteYL();
+      parentYR = parentComponent.getAbsoluteYR();
     }
 
-    absoluteH = parentH * relativeH;
-    absoluteW = parentW * relativeW;
-    absoluteX = parentX + relativeX * parentW;
-    absoluteY = parentY + relativeY * parentH;
+    absoluteXL = parentXL + relativeXL * (parentXR - parentXL);
+    absoluteXR = parentXL + relativeXR * (parentXR - parentXL);
+    absoluteYL = parentYL + relativeYL * (parentYR - parentYL);
+    absoluteYR = parentYL + relativeYR * (parentYR - parentYL);
   }
 
   public void getTextures(List<UITexture> textures) {

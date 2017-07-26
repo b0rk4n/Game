@@ -133,7 +133,11 @@ public class UIComponent {
   }
 
   private void computeAbsolutePosition() {
-    float parentXL, parentXR, parentYL, parentYR;
+    float parentXL;
+    float parentXR;
+    float parentYL;
+    float parentYR;
+
     if(parentComponent == null) {
       parentXL = 0;
       parentXR = 1;

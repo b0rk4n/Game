@@ -22,7 +22,6 @@ public class MousePicker {
     this.camera = cam;
     this.projectionMatrix = projectionMatrix;
     this.viewMatrix = Maths.createViewMatrix(camera);
-
   }
 
   public Vector3f getCurrentRay() {

@@ -10,20 +10,20 @@ import renderEngine.Loader;
  */
 public class UIComponent {
 
-  private UIComponent parentComponent;
-  private String textureName;
+  protected UIComponent parentComponent;
+  protected String textureName;
 
-  private float relativeXL;   // x left
-  private float relativeXR;   // x right
-  private float relativeYL;   // y left
-  private float relativeYR;   // y right
+  protected float relativeXL;   // x left
+  protected float relativeXR;   // x right
+  protected float relativeYU;   // y up
+  protected float relativeYD;   // y down
 
-  private float absoluteXL;   // x left
-  private float absoluteXR;   // x right
-  private float absoluteYL;   // y left
-  private float absoluteYR;   // y right
+  protected float absoluteXL;   // x left
+  protected float absoluteXR;   // x right
+  protected float absoluteYU;   // y up
+  protected float absoluteYD;   // y down
 
-  private boolean visible;
+  protected boolean visible;
 
 
   private UITexture background;
@@ -38,10 +38,12 @@ public class UIComponent {
     return absoluteXR;
   }
 
-  private float getAbsoluteYL() { return absoluteYL; }
+  private float getAbsoluteYU() {
+    return absoluteYU;
+  }
 
-  private float getAbsoluteYR() {
-    return absoluteYR;
+  private float getAbsoluteYD() {
+    return absoluteYD;
   }
 
   private void setBackground() {
@@ -49,25 +51,25 @@ public class UIComponent {
       background = new UITexture(
           Loader.getLoader().loadTexture(textureName),
           new Vector2f(absoluteXL + absoluteXR - 1,
-              1 - absoluteYL - absoluteYR),
-          new Vector2f(absoluteXR - absoluteXL, absoluteYR - absoluteYL));
+              1 - absoluteYU - absoluteYD),
+          new Vector2f(absoluteXR - absoluteXL, absoluteYD - absoluteYU));
     } else {
       background.setCoords(new Vector2f(absoluteXL + absoluteXR - 1,
-              1 - absoluteYL - absoluteYR),
-          new Vector2f(absoluteXR - absoluteXL, absoluteYR - absoluteYL));
+              1 - absoluteYU - absoluteYD),
+          new Vector2f(absoluteXR - absoluteXL, absoluteYD - absoluteYU));
     }
   }
 
   public UIComponent(String textureName, UIComponent parent, float relativeXL, float relativeXR,
-      float relativeYL, float relativeYR) {
+      float relativeYU, float relativeYD) {
     this.textureName = textureName;
-    parent.add(this,relativeXL,relativeXR,relativeYL,relativeYR);
+    parent.add(this,relativeXL,relativeXR,relativeYU,relativeYD);
     setBackground();
   }
 
-  public UIComponent(String textureName, float relativeXL, float relativeXR, float relativeYL,
-      float relativeYR) {
-    setPosition(relativeXL,relativeXR,relativeYL,relativeYR);
+  public UIComponent(String textureName, float relativeXL, float relativeXR, float relativeYU,
+      float relativeYD) {
+    setPosition(relativeXL,relativeXR,relativeYU,relativeYD);
     this.parentComponent = null;
     computeAbsolutePosition();
     this.visible = true;
@@ -75,17 +77,17 @@ public class UIComponent {
     setBackground();
   }
 
-  public UIComponent(String textureName) {
-    this(textureName,0,0,0,0);
+  public UIComponent(String textureName, UIComponent parent) {
+    this(textureName, parent,0,0,0,0);
     this.visible = false;
   }
 
-  private void setPosition(float relativeXL, float relativeXR, float relativeYL,
-      float relativeYR) {
+  private void setPosition(float relativeXL, float relativeXR, float relativeYU,
+      float relativeYD) {
     this.relativeXL = relativeXL;
     this.relativeXR = relativeXR;
-    this.relativeYL = relativeYL;
-    this.relativeYR = relativeYR;
+    this.relativeYU = relativeYU;
+    this.relativeYD = relativeYD;
     computeAbsolutePosition();
   }
 
@@ -98,13 +100,13 @@ public class UIComponent {
   }
 
   public void add(UIComponent child, float relativeXL, float relativeXR,
-      float relativeYL, float relativeYR){
-      child.setParent(this);
-      child.setPosition(relativeXL, relativeXR, relativeYL, relativeYR);
-      child.setBackground();
-      childs.add(child);
-      child.setVisible(true);
-      child.recomputeAbsolutePosition();
+    float relativeYU, float relativeYD){
+    child.setParent(this);
+    child.setPosition(relativeXL, relativeXR, relativeYU, relativeYD);
+    child.setBackground();
+    childs.add(child);
+    child.setVisible(true);
+    child.recomputeAbsolutePosition();
   }
 
   private void recomputeAbsolutePosition() {
@@ -135,25 +137,25 @@ public class UIComponent {
   private void computeAbsolutePosition() {
     float parentXL;
     float parentXR;
-    float parentYL;
-    float parentYR;
+    float parentYU;
+    float parentYD;
 
     if(parentComponent == null) {
       parentXL = 0;
       parentXR = 1;
-      parentYL = 0;
-      parentYR = 1;
+      parentYU = 0;
+      parentYD = 1;
     } else {
       parentXL = parentComponent.getAbsoluteXL();
       parentXR = parentComponent.getAbsoluteXR();
-      parentYL = parentComponent.getAbsoluteYL();
-      parentYR = parentComponent.getAbsoluteYR();
+      parentYU = parentComponent.getAbsoluteYU();
+      parentYD = parentComponent.getAbsoluteYD();
     }
 
     absoluteXL = parentXL + relativeXL * (parentXR - parentXL);
     absoluteXR = parentXL + relativeXR * (parentXR - parentXL);
-    absoluteYL = parentYL + relativeYL * (parentYR - parentYL);
-    absoluteYR = parentYL + relativeYR * (parentYR - parentYL);
+    absoluteYU = parentYU + relativeYU * (parentYD - parentYU);
+    absoluteYD = parentYU + relativeYD * (parentYD - parentYU);
   }
 
   public void getTextures(List<UITexture> textures) {

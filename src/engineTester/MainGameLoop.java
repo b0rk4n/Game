@@ -1,9 +1,7 @@
 package engineTester;
 
 
-import UI.UIComponent;
-import UI.UIRenderer;
-import UI.UITexture;
+import UI.*;
 import entities.Camera;
 import entities.Entity;
 import entities.Light;
@@ -157,8 +155,9 @@ public class MainGameLoop {
 
     TextMaster.init(loader);
     FontType font = new FontType(loader.loadTexture("sans"),new File("res/sans.fnt"));
-    GUIText text = new GUIText("text", 1, font, new Vector2f(0,0),1f,true);
+    GUIText text = new GUIText("text", 1, font, new Vector2f(0.5f,0.5f),1f,false); /**/
     MousePicker picker = new MousePicker(camera,renderer.getProjectionMatrix());
+
 
     // UI stuff
     /*List<UITexture> uis = new ArrayList<>();
@@ -166,11 +165,14 @@ public class MainGameLoop {
     uis.add(uiTexture);
     */
     List<UIComponent> uis = new ArrayList<>();
-    UIComponent ui1 = new UIComponent("cobble",0f,0.25f,0f,0.25f);
-    UIComponent ui2 = new UIComponent("cobble",0.25f,0.75f,0.25f,0.75f);
-    UIComponent ui3 = new UIComponent("cobble",ui2,0.5f,1f,0.5f,1.5f);
+    UIButton ui1 = new UIButton("cobble",0f,0.25f,0f,0.25f);
+    UITextbox ui2 = new UITextbox("cobble",ui1);
+    //UIComponent ui3 = new UIComponent("cobble",ui2,0.5f,1f,0.5f,1.5f);
 
-    ui1.add(ui2,0.5f,1f,0.5f,1f);
+    //ui1.add(ui2,0.5f,1f,0.5f,1f);
+
+    ui2.drawTextbox(loader,"text","sans", 1f, false, 0.5f, 0.5f,
+            1f, true, new Vector3f(1,0,0));
 
     uis.add(ui1);
     //uis.add(ui2);
@@ -182,6 +184,9 @@ public class MainGameLoop {
       camera.move();
       //System.out.println(picker.getCurrentRay());
       picker.update();
+
+      //ui1.hoverOverButton(camera,renderer);
+
       for (int i = 0; i < 40; i++) {
         for (int j = 0; j < 25; j++) {
           renderer.processEntity(tiles[i][j]);

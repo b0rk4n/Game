@@ -46,7 +46,7 @@ public class UIComponent {
     return absoluteYD;
   }
 
-  private void setBackground() {
+  protected void setBackground() {
     if(background == null) {
       background = new UITexture(
           Loader.getLoader().loadTexture(textureName),
@@ -82,7 +82,12 @@ public class UIComponent {
     this.visible = false;
   }
 
-  private void setPosition(float relativeXL, float relativeXR, float relativeYU,
+  public UIComponent(String textureName) {
+    this(textureName,0,0,0,0);
+    this.visible = false;
+  }
+
+  protected void setPosition(float relativeXL, float relativeXR, float relativeYU,
       float relativeYD) {
     this.relativeXL = relativeXL;
     this.relativeXR = relativeXR;
@@ -122,16 +127,23 @@ public class UIComponent {
 
   public void remove() {
     setPosition(0,0,0,0);
-    for (int i = 0; i < parentComponent.childs.size(); i++) {
-      if(parentComponent.childs.get(i) == this) {
-        parentComponent.childs.remove(i);
-        parentComponent  = null;
-        setVisible(false);
-        computeAbsolutePosition();
-        return;
+    if(parentComponent != null) {
+      for (int i = 0; i < parentComponent.childs.size(); i++) {
+        if (parentComponent.childs.get(i) == this) {
+          parentComponent.childs.remove(i);
+          parentComponent = null;
+
+          break;
+        }
       }
     }
-    assert true;
+    setVisible(false);
+    setBackground();
+    if(!this.childs.isEmpty()) {
+      for(int i = 0 ; i < this.childs.size(); i++) {
+        this.childs.get(i).remove();
+      }
+    }
   }
 
   private void computeAbsolutePosition() {

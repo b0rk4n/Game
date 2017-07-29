@@ -154,8 +154,10 @@ public class MainGameLoop {
 
 
     TextMaster.init(loader);
-    FontType font = new FontType(loader.loadTexture("sans"),new File("res/sans.fnt"));
-    GUIText text = new GUIText("text", 1, font, new Vector2f(0.5f,0.5f),1f,false); /**/
+
+    //FontType font = new FontType(loader.loadTexture("sans"),new File("res/sans.fnt"));
+    //GUIText text = new GUIText("text", 1, font, new Vector2f(0.5f,0.5f),1f,false); /**/
+
     MousePicker picker = new MousePicker(camera,renderer.getProjectionMatrix());
 
 
@@ -166,16 +168,19 @@ public class MainGameLoop {
     */
     List<UIComponent> uis = new ArrayList<>();
     UIButton ui1 = new UIButton("cobble",0f,0.25f,0f,0.25f);
-    UITextbox ui2 = new UITextbox("cobble",ui1);
-    //UIComponent ui3 = new UIComponent("cobble",ui2,0.5f,1f,0.5f,1.5f);
+    //UITextbox ui2 = new UITextbox("cobble", ui1, 1f, 2f, 1f, 2f);
+    UIComponent ui3 = new UIComponent("sand");
 
     //ui1.add(ui2,0.5f,1f,0.5f,1f);
 
-    ui2.drawTextbox(loader,"text","sans", 1f, false, 0.5f, 0.5f,
-            1f, true, new Vector3f(1,0,0));
+    //ui2.drawText(loader,"text","sans", 1f, false, 0.5f,
+            //0.5f,1f, true, new Vector3f(1,0,0));
 
     uis.add(ui1);
-    //uis.add(ui2);
+    uis.add(ui3);
+
+    //ui1.remove();
+    //ui2.removetext();
 
     UIRenderer uiRenderer = new UIRenderer(loader);
 
@@ -185,7 +190,8 @@ public class MainGameLoop {
       //System.out.println(picker.getCurrentRay());
       picker.update();
 
-      //ui1.hoverOverButton(camera,renderer);
+      //ui1.hoverOverButton(ui3,0f,0.25f,0f,0.25f);
+      ui1.isRightMouseClicked();
 
       for (int i = 0; i < 40; i++) {
         for (int j = 0; j < 25; j++) {

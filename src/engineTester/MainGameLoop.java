@@ -167,9 +167,10 @@ public class MainGameLoop {
     uis.add(uiTexture);
     */
     List<UIComponent> uis = new ArrayList<>();
-    UIButton ui1 = new UIButton("cobble",0f,0.25f,0f,0.25f);
+    UIButton ui1 = new UIButton("cobble",0.1f,0.15f,0.1f,0.9f);
     //UITextbox ui2 = new UITextbox("cobble", ui1, 1f, 2f, 1f, 2f);
     UIComponent ui3 = new UIComponent("sand");
+    UIScrollbar ui4 = new UIScrollbar("sand", ui1, 0f, 1f, 0f, 0.25f);
 
     //ui1.add(ui2,0.5f,1f,0.5f,1f);
 
@@ -192,6 +193,7 @@ public class MainGameLoop {
 
       //ui1.hoverOverButton(ui3,0f,0.25f,0f,0.25f);
       ui1.isRightMouseClicked();
+      ui4.scrollVeritival();
 
       for (int i = 0; i < 40; i++) {
         for (int j = 0; j < 25; j++) {

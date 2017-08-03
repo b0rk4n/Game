@@ -34,7 +34,7 @@ public class UIRenderer {
     for(UITexture uiTexture: uiTextures) {
       GL13.glActiveTexture(GL13.GL_TEXTURE0);
       GL11.glBindTexture(GL11.GL_TEXTURE_2D, uiTexture.getTexture());
-      Matrix4f matrix = Maths.createTransformationMatrix(uiTexture.getPosition(), uiTexture.getScale());
+      Matrix4f matrix = Maths.createTransformationMatrix(uiTexture.getPosition(), uiTexture.getScale(), uiTexture.getRotation());
       shader.loadTransformation(matrix);
       GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP,0,quad.getVertexCount());
     }

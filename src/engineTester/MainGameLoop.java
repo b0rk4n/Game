@@ -167,18 +167,19 @@ public class MainGameLoop {
     uis.add(uiTexture);
     */
     List<UIComponent> uis = new ArrayList<>();
-    UIButton ui1 = new UIButton("cobble",0.1f,0.15f,0.1f,0.9f);
-    //UITextbox ui2 = new UITextbox("cobble", ui1, 1f, 2f, 1f, 2f);
-    UIComponent ui3 = new UIComponent("sand");
-    UIScrollbar ui4 = new UIScrollbar("sand", ui1, 0f, 1f, 0f, 0.25f);
+    //UIButton ui1 = new UIButton("cobble",0, 0.4f,0.6f,0.4f,0.6f);
+    //UITextbox ui2 = new UITextbox("cobble", ui1, 90,1f, 2f, 1f, 2f);
+    //UIComponent ui3 = new UIComponent("sand");
+    //UIScrollbar ui4 = new UIScrollbar("sand", ui1, 0f, 0.25f, 0f, 1f);
+    UIBordedComponent ui5 = new UIBordedComponent("brown","sand", "cobble", 0.2f, 0.2f, 0.005f, 0.4f, 0.4f);
 
     //ui1.add(ui2,0.5f,1f,0.5f,1f);
 
     //ui2.drawText(loader,"text","sans", 1f, false, 0.5f,
             //0.5f,1f, true, new Vector3f(1,0,0));
 
-    uis.add(ui1);
-    uis.add(ui3);
+    //uis.add(ui1);
+    uis.add(ui5);
 
     //ui1.remove();
     //ui2.removetext();
@@ -192,8 +193,8 @@ public class MainGameLoop {
       picker.update();
 
       //ui1.hoverOverButton(ui3,0f,0.25f,0f,0.25f);
-      ui1.isRightMouseClicked();
-      ui4.scrollVeritival();
+      //ui1.isRightMouseClicked();
+      //ui4.scrollHorizontal();
 
       for (int i = 0; i < 40; i++) {
         for (int j = 0; j < 25; j++) {

@@ -9,12 +9,14 @@ public class UITexture {
   private int texture;
   private Vector2f position;
   private Vector2f scale;
+  private float rotation;
 
   public UITexture(int texture, Vector2f position,
-      Vector2f scale) {
+      Vector2f scale, float rotation) {
     this.texture = texture;
     this.position = position;
     this.scale = scale;
+    this.rotation = rotation;
   }
 
   public int getTexture() {
@@ -29,8 +31,13 @@ public class UITexture {
     return scale;
   }
 
-  public void setCoords(Vector2f position, Vector2f scale){
+  public float getRotation() {
+    return rotation;
+  }
+
+  public void setCoords(Vector2f position, Vector2f scale, float rotation){
     this.scale = scale;
     this.position = position;
+    this.rotation = rotation;
   }
 }

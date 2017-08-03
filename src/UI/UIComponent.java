@@ -24,9 +24,9 @@ public class UIComponent {
   protected float absoluteYD;   // y down
 
   protected boolean visible;
+  protected float rotation;
 
-
-  private UITexture background;
+  public UITexture background;
 
   private List<UIComponent> childs = new ArrayList<>();
 
@@ -52,23 +52,30 @@ public class UIComponent {
           Loader.getLoader().loadTexture(textureName),
           new Vector2f(absoluteXL + absoluteXR - 1,
               1 - absoluteYU - absoluteYD),
-          new Vector2f(absoluteXR - absoluteXL, absoluteYD - absoluteYU));
+          new Vector2f(absoluteXR - absoluteXL, absoluteYD - absoluteYU),
+              rotation);
     } else {
       background.setCoords(new Vector2f(absoluteXL + absoluteXR - 1,
               1 - absoluteYU - absoluteYD),
-          new Vector2f(absoluteXR - absoluteXL, absoluteYD - absoluteYU));
+          new Vector2f(absoluteXR - absoluteXL, absoluteYD - absoluteYU),
+              rotation);
     }
   }
 
-  public UIComponent(String textureName, UIComponent parent, float relativeXL, float relativeXR,
+  public UIComponent() {
+  }
+
+  public UIComponent(String textureName, UIComponent parent, float rotation, float relativeXL, float relativeXR,
       float relativeYU, float relativeYD) {
+    this.rotation = rotation;
     this.textureName = textureName;
     parent.add(this,relativeXL,relativeXR,relativeYU,relativeYD);
     setBackground();
   }
 
-  public UIComponent(String textureName, float relativeXL, float relativeXR, float relativeYU,
+  public UIComponent(String textureName, float rotation, float relativeXL, float relativeXR, float relativeYU,
       float relativeYD) {
+    this.rotation = rotation;
     setPosition(relativeXL,relativeXR,relativeYU,relativeYD);
     this.parentComponent = null;
     computeAbsolutePosition();
@@ -78,12 +85,12 @@ public class UIComponent {
   }
 
   public UIComponent(String textureName, UIComponent parent) {
-    this(textureName, parent,0,0,0,0);
+    this(textureName, parent, 0,0,0,0,0);
     this.visible = false;
   }
 
   public UIComponent(String textureName) {
-    this(textureName,0,0,0,0);
+    this(textureName,0,0,0,0,0);
     this.visible = false;
   }
 
@@ -94,6 +101,11 @@ public class UIComponent {
     this.relativeYU = relativeYU;
     this.relativeYD = relativeYD;
     computeAbsolutePosition();
+  }
+
+  protected void setRotation(float rotation) {
+    this.rotation = rotation;
+    this.setBackground();
   }
 
   public void setVisible(boolean visible) {

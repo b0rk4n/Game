@@ -167,19 +167,22 @@ public class MainGameLoop {
     uis.add(uiTexture);
     */
     List<UIComponent> uis = new ArrayList<>();
-    //UIButton ui1 = new UIButton("cobble",0, 0.4f,0.6f,0.4f,0.6f);
+    //UIButton ui1 = new UIButton("cobble",0, 0.5f,0.8f,0.4f,0.5f);
     //UITextbox ui2 = new UITextbox("cobble", ui1, 90,1f, 2f, 1f, 2f);
-    //UIComponent ui3 = new UIComponent("sand");
-    //UIScrollbar ui4 = new UIScrollbar("sand", ui1, 0f, 0.25f, 0f, 1f);
-    UIBordedComponent ui5 = new UIBordedComponent("brown","sand", "cobble", 0.2f, 0.2f, 0.005f, 0.4f, 0.4f);
+    UIComponent ui3 = new UIComponent("cobble",0, 0.5f,0.8f,0.4f,0.7f);
+    //UIScrollbar ui4 = new UIScrollbar("cobble", ui3, 0, 0f, 1, 0f, 0.25f);
+    //UIBordedComponent ui5 = new UIBordedComponent("sand","corner", "brown", 0.2f, 0.2f, 0.005f, 0.4f, 0.4f);
+    ScrollableComponent ui6 = new ScrollableComponent("cobble", "black", 0, 0.1f, 0.3f, 0.1f, 0.3f, 0.5f);
 
     //ui1.add(ui2,0.5f,1f,0.5f,1f);
 
-    //ui2.drawText(loader,"text","sans", 1f, false, 0.5f,
-            //0.5f,1f, true, new Vector3f(1,0,0));
+    //ui6.drawText(loader,"text","sans", 1f, false, 0.5f,
+           //0.5f,1f, false, new Vector3f(1,0,0));
 
     //uis.add(ui1);
-    uis.add(ui5);
+    uis.add(ui3);
+    //uis.add(ui5);
+    uis.add(ui6);
 
     //ui1.remove();
     //ui2.removetext();
@@ -192,9 +195,10 @@ public class MainGameLoop {
       //System.out.println(picker.getCurrentRay());
       picker.update();
 
-      //ui1.hoverOverButton(ui3,0f,0.25f,0f,0.25f);
+      //ui1.hoverOverButton("sand", new Vector3f(0,1,0));
       //ui1.isRightMouseClicked();
-      //ui4.scrollHorizontal();
+      //ui4.scrollVeritival();
+      ui6.Scroll();
 
       for (int i = 0; i < 40; i++) {
         for (int j = 0; j < 25; j++) {

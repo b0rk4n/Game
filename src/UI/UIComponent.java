@@ -10,43 +10,75 @@ import renderEngine.Loader;
  */
 public class UIComponent {
 
-  protected UIComponent parentComponent;
-  protected String textureName;
+  private UIComponent parentComponent;
+  private String textureName;
 
-  protected float relativeXL;   // x left
-  protected float relativeXR;   // x right
-  protected float relativeYU;   // y up
-  protected float relativeYD;   // y down
+  private float relativeXL;   // x left
+  private float relativeXR;   // x right
+  private float relativeYU;   // y up
+  private float relativeYD;   // y down
 
-  protected float absoluteXL;   // x left
-  protected float absoluteXR;   // x right
-  protected float absoluteYU;   // y up
-  protected float absoluteYD;   // y down
+  private float absoluteXL;   // x left
+  private float absoluteXR;   // x right
+  private float absoluteYU;   // y up
+  private float absoluteYD;   // y down
 
-  protected boolean visible;
-  protected float rotation;
+  private boolean visible;
+  private float rotation;
 
-  public UITexture background;
+  private UITexture background;
 
   private List<UIComponent> childs = new ArrayList<>();
 
-  private float getAbsoluteXL() {
+  UIComponent getParentComponent() {
+    return parentComponent;
+  }
+
+  float getAbsoluteXL() {
     return absoluteXL;
   }
 
-  private float getAbsoluteXR() {
+  float getAbsoluteXR() {
     return absoluteXR;
   }
 
-  private float getAbsoluteYU() {
+  float getAbsoluteYU() {
     return absoluteYU;
   }
 
-  private float getAbsoluteYD() {
+  float getAbsoluteYD() {
     return absoluteYD;
   }
 
-  protected void setBackground() {
+  float getRelativeXL() {
+    return relativeXL;
+  }
+
+  float getRelativeXR() {
+    return relativeXR;
+  }
+
+  float getRelativeYU() {
+    return relativeYU;
+  }
+
+  float getRelativeYD() {
+    return relativeYD;
+  }
+
+  public UITexture getTexture() {
+    return background;
+  }
+
+  void setTexture(UITexture texture) {
+    background = texture;
+  }
+
+  void setTextureName(String texture) {
+    textureName = texture;
+  }
+
+  void setBackground() {
     if(background == null) {
       background = new UITexture(
           Loader.getLoader().loadTexture(textureName),
@@ -84,18 +116,17 @@ public class UIComponent {
     setBackground();
   }
 
-  public UIComponent(String textureName, UIComponent parent) {
+  UIComponent(String textureName, UIComponent parent) {
     this(textureName, parent, 0,0,0,0,0);
     this.visible = false;
   }
 
-  public UIComponent(String textureName) {
+  UIComponent(String textureName) {
     this(textureName,0,0,0,0,0);
     this.visible = false;
   }
 
-  protected void setPosition(float relativeXL, float relativeXR, float relativeYU,
-      float relativeYD) {
+  void setPosition(float relativeXL, float relativeXR, float relativeYU, float relativeYD) {
     this.relativeXL = relativeXL;
     this.relativeXR = relativeXR;
     this.relativeYU = relativeYU;
@@ -103,12 +134,7 @@ public class UIComponent {
     computeAbsolutePosition();
   }
 
-  protected void setRotation(float rotation) {
-    this.rotation = rotation;
-    this.setBackground();
-  }
-
-  public void setVisible(boolean visible) {
+  private void setVisible(boolean visible) {
     this.visible = visible;
   }
 
@@ -152,8 +178,8 @@ public class UIComponent {
     setVisible(false);
     setBackground();
     if(!this.childs.isEmpty()) {
-      for(int i = 0 ; i < this.childs.size(); i++) {
-        this.childs.get(i).remove();
+      for (UIComponent child : this.childs) {
+        child.remove();
       }
     }
   }
